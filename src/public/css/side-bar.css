@@ -1,0 +1,17 @@
+.sidebar {
+    padding: 20px 10px;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 56px);
+}
+.sidebar-item {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.sidebar-item:hover {
+    background-color: #e9ecef;
+}
+.active {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
