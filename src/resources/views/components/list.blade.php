@@ -13,7 +13,7 @@
                     {{ $rescuePet->self_introduction }}
                 </p>
             </a>
-            @if(in_array($rescuePet->rescue_pets_id, $favoriteIds))
+            @if(in_array($rescuePet->rescue_pets_id, $favorites))
                 <div class="btn btn-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">★ お気に入り登録済</div>
             @else
                 <div class="btn btn-outline-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">☆ お気に入り登録</div>

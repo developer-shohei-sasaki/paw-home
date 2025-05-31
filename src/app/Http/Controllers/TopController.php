@@ -11,19 +11,15 @@ class TopController extends Controller
     // 新着情報の最大表示件数
     private const PETS_LIMIT = 6;
 
-    // 年齢算出用のクエリ
-    private const AGE_CALCULATION_SQL = 'CASE
-        WHEN TIMESTAMPDIFF(YEAR, rescue_pets.birthday, CURDATE()) = 0
-        THEN CONCAT(TIMESTAMPDIFF(MONTH, rescue_pets.birthday, CURDATE()), "ヶ月")
-        ELSE CONCAT(TIMESTAMPDIFF(YEAR, rescue_pets.birthday, CURDATE()), "才")
-        END AS age';
-
+    /**
+     * 一覧表示
+     */
     public function index()
     {
         $rescuePets = $this->getRecentRescuePets();
-        $favoriteIds = $this->getMemberFavoriteIds();
+        $favorites = $this->getMemberFavorites();
 
-        return view('top.index', compact('rescuePets', 'favoriteIds'));
+        return view('top.index', compact('rescuePets', 'favorites'));
     }
 
     /**
@@ -35,7 +31,7 @@ class TopController extends Controller
             'rescue_pets.rescue_pets_id',
             'rescue_pets.picture',
             'rescue_pets.name',
-            DB::raw(self::AGE_CALCULATION_SQL),
+            DB::raw(RescuePet::AGE_CALCULATION_SQL),
             'rescue_pets.created_at',
             'rescue_pets.self_introduction',
             'genders.name as gender_name',
@@ -49,9 +45,9 @@ class TopController extends Controller
     }
 
     /**
-     * お気に入りリストを取得（ログイン時のみ）
+     * お気に入りペットID取得
      */
-    private function getMemberFavoriteIds()
+    private function getMemberFavorites()
     {
         if (!session('member_id')) { return []; }
 

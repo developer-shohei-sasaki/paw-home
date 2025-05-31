@@ -5,32 +5,79 @@ namespace App\Http\Controllers;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 use App\Models\RescuePet;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 
 class PetController extends Controller
 {
-    public function show($rescue_pets_id)
+    /**
+     * ペットの詳細情報表示
+     */
+    public function show(int $rescuePetsId): View
     {
-        $rescue_pet = RescuePet::query()->where('rescue_pets_id', $rescue_pets_id)->firstOrFail();
-        return view('pet.show')->with(['rescue_pet' => $rescue_pet]);
+        $rescuePet = $this->findRescuePetById($rescuePetsId);
+
+        return view('pet.show', compact('rescuePet'));
     }
 
-    public function favorite(Request $request)
+    /**
+     * お気に入り状態を切り替え
+     */
+    public function favorite(Request $request): JsonResponse
     {
-        $favorite = Favorite::query()->where([
-            ['member_id', session('member_id')],
-            ['rescue_pets_id', $request->input('rescue_pets_id')],
-            ['delete_flg', 0]
-        ]);
+        $rescuePetsId = $request->input('rescue_pets_id');
+        $memberId = session('member_id');
+
+        $favorite = $this->findFavorite($memberId, $rescuePetsId);
 
         if ($favorite->exists()) {
-            $favorite->update(['delete_flg' => 1]);
+            $this->removeFavorite($favorite);
+            $status = 'removed';
         } else {
-            $favorite = new Favorite;
-            $favorite->fill([
-                'member_id' => session('member_id'),
-                'rescue_pets_id' => $request->input('rescue_pets_id')
-            ])->save();
+            $this->addFavorite($memberId, $rescuePetsId);
+            $status = 'added';
         }
+
+        return response()->json(['status' => $status]);
+    }
+
+    /**
+     * ペット詳細情報取得
+     */
+    private function findRescuePetById(int $rescuePetsId): RescuePet
+    {
+        return RescuePet::where('rescue_pets_id', $rescuePetsId)->firstOrFail();
+    }
+
+    /**
+     * お気に入り情報取得
+     */
+    private function findFavorite(int $memberId, int $rescuePetsId)
+    {
+        return Favorite::where([
+            ['member_id', $memberId],
+            ['rescue_pets_id', $rescuePetsId],
+            ['delete_flg', 0]
+        ]);
+    }
+
+    /**
+     * お気に入り削除
+     */
+    private function removeFavorite($favorite): void
+    {
+        $favorite->update(['delete_flg' => 1]);
+    }
+
+    /**
+     * お気に入り追加
+     */
+    private function addFavorite(int $memberId, int $rescuePetsId): void
+    {
+        $favorite = new Favorite();
+        $favorite->fill([
+            'member_id' => $memberId,
+            'rescue_pets_id' => $rescuePetsId
+        ])->save();
     }
 }
