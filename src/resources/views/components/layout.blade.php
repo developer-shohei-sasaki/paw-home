@@ -13,6 +13,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
+
         <header class="p-3 border-bottom">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none me-lg-auto">
@@ -35,7 +36,7 @@
                 </div>
             </div>
         </header>
-        <!-- サイドバーメニュー -->
+
         <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
             <div class="position-sticky">
                 <ul class="nav flex-column">
@@ -67,14 +68,18 @@
                 </ul>
             </div>
         </div>
+
         <main class="col-md-9 ms-sm-auto col-lg-10">
             {{ $slot }}
         </main>
+
         <footer>
             <p class="float-end"><a href="{{ route('top.index') }}">トップに戻る</a></p>
         </footer>
+
     </div>
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="modalSignin" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content rounded-4 shadow">
@@ -82,7 +87,6 @@
                 <h1 class="fw-bold mb-0 fs-2">ログイン</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body p-5 pt-0">
                 <form method="post" action="{{ route('member.login') }}">
                     @csrf
@@ -102,6 +106,7 @@
         </div>
     </div>
 </div>
+
 <script src="{{ asset('js/utils.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
