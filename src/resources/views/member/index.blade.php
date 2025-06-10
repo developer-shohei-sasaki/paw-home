@@ -13,40 +13,49 @@
 
         <form class="col-lg-8 mx-auto" method="post" action="{{ route('member.create') }}">
             @csrf
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="row g-3">
                 <div class="col-sm-6">
                     <label for="last-name" class="form-label">姓</label>
-                    <input type="text" class="form-control" id="last-name" name="last-name" value="{{ $member->last_name ?? '' }}" required="">
+                    <input type="text" class="form-control" id="last-name" name="last-name" value="{{ $member->last_name ?? '' }}">
                 </div>
 
                 <div class="col-sm-6">
                     <label for="first-name" class="form-label">名</label>
-                    <input type="text" class="form-control" id="first-name" name="first-name" value="{{ $member->first_name ?? '' }}" required="">
+                    <input type="text" class="form-control" id="first-name" name="first-name" value="{{ $member->first_name ?? '' }}">
                 </div>
 
                 <div class="col-sm-6">
                     <label for="birthday" class="form-label">生年月日</label>
-                    <input type="date" class="form-control" id="birthday" name="birthday" value="{{ $member->birthday ?? '' }}" required="">
+                    <input type="date" class="form-control" id="birthday" name="birthday" value="{{ $member->birthday ?? '' }}">
                 </div>
 
                 <div>
                     <label for="zip-code" class="form-label">郵便番号</label>
-                    <input type="text" class="form-control" id="zip-code" name="zip-code" placeholder="ハイフンなしで入力してください" maxlength="7" required="" value="{{ $member->zip_code ?? '' }}" oninput="fetchAddressByZipCode(this.value)">
+                    <input type="text" class="form-control" id="zip-code" name="zip-code" placeholder="ハイフンなしで入力してください" maxlength="7" value="{{ $member->zip_code ?? '' }}" oninput="fetchAddressByZipCode(this.value)">
                 </div>
 
                 <div>
                     <label for="address" class="form-label">住所</label>
-                    <input type="text" class="form-control" id="address" name="address" required="" value="{{ $member->address ?? '' }}">
+                    <input type="text" class="form-control" id="address" name="address" value="{{ $member->address ?? '' }}">
                 </div>
 
                 <div>
                     <label for="email" class="form-label">メールアドレス</label>
-                    <input type="email" class="form-control" id="email" name="email" required="" value="{{ $member->email ?? '' }}" >
+                    <input type="email" class="form-control" id="email" name="email" value="{{ $member->email ?? '' }}" >
                 </div>
 
                 <div>
                     <label for="password" class="form-label">パスワード</label>
-                    <input type="password" class="form-control" id="password" name="password" required="" value="{{ $member->password ?? '' }}">
+                    <input type="password" class="form-control" id="password" name="password" value="{{ $member->password ?? '' }}">
                 </div>
             </div>
 

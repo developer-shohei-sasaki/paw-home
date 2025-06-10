@@ -88,18 +88,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-5 pt-0">
+                @if($errors->has('login'))
+                    <div class="alert alert-danger login-error">
+                        {{ $errors->first('login') }}
+                    </div>
+                @endif
                 <form method="post" action="{{ route('member.login') }}">
                     @csrf
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="name@example.com">
+                        <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="name@example.com" value="{{ old('email') }}" required>
                         <label for="email">メールアドレス</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control rounded-3" id="password" name="password" placeholder="Password">
+                        <input type="password" class="form-control rounded-3" id="password" name="password" placeholder="Password" required>
                         <label for="password">パスワード</label>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">ログイン</button>
-                    <a href="#" class="d-block mb-2">パスワードを忘れた方はこちら</a>
                     <a href="{{ route('member.index') }}" class="d-block">新規会員登録はこちら</a>
                 </form>
             </div>

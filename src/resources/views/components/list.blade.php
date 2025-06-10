@@ -13,10 +13,14 @@
                     {{ $rescuePet->self_introduction }}
                 </p>
             </a>
-            @if(in_array($rescuePet->rescue_pets_id, $favorites))
-                <div class="btn btn-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">★ お気に入り登録済</div>
+            @if(!session("member_id"))
+                <a href="#" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalSignin">☆ お気に入り登録</a>
             @else
-                <div class="btn btn-outline-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">☆ お気に入り登録</div>
+                @if(in_array($rescuePet->rescue_pets_id, $favorites))
+                    <div class="btn btn-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">★ お気に入り登録済</div>
+                @else
+                    <div class="btn btn-outline-warning" onclick="switchFavorite(this, {{ $rescuePet->rescue_pets_id }});">☆ お気に入り登録</div>
+                @endif
             @endif
         </div>
     @endforeach

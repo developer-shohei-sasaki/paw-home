@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreMemberRequest;
 
 class MemberController extends Controller
 {
@@ -20,7 +21,7 @@ class MemberController extends Controller
     /**
      * 新規会員登録
      */
-    public function create(Request $request)
+    public function create(StoreMemberRequest $request)
     {
         $member = new Member;
         $member->fill([
@@ -43,15 +44,27 @@ class MemberController extends Controller
      */
     public function login(Request $request)
     {
-        $member = Member::query()->where([
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-            'delete_flg' => 0
-        ])->firstOrFail();
+        try {
+            $member = Member::query()->where([
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+                'delete_flg' => 0
+            ])->first();
 
-        session(['member_id' => $member->member_id]);
+            if (!$member) {
+                return back()->withErrors([
+                    'login' => 'メールアドレスまたはパスワードが正しくありません。'
+                ])->withInput(['email' => $request->input('email')]);
+            }
 
-        return redirect()->route('top.index');
+            session(['member_id' => $member->member_id]);
+
+            return redirect()->route('top.index');
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'login' => 'ログイン処理中にエラーが発生しました。'
+            ])->withInput(['email' => $request->input('email')]);
+        }
     }
 
     /**

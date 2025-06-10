@@ -1,6 +1,7 @@
 // DOMの読み込みが完了したら実行
 document.addEventListener('DOMContentLoaded', function() {
     setupZipCodeListener();
+    setupLoginModalAutoOpen();
 });
 
 // お気に入りボタンの状態定数
@@ -105,4 +106,14 @@ function setupZipCodeListener() {
             }
         }
     });
+}
+
+/**
+ * ログインエラーの場合はログインモーダルを表示したままにする
+ */
+function setupLoginModalAutoOpen() {
+    if (document.querySelector('.login-error') !== null) {
+        const loginModal = new bootstrap.Modal(document.getElementById('modalSignin'));
+        loginModal.show();
+    }
 }
