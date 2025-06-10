@@ -1,22 +1,35 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\TopController;
-use \App\Http\Controllers\SearchController;
-use \App\Http\Controllers\PetController;
-use \App\Http\Controllers\MemberController;
-use \App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\TopController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PetController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\FavoriteController;
 
+// トップページ
 Route::get('/', [TopController::class, 'index'])->name('top.index');
 
-Route::get('/search/{pet_type_id}', [SearchController::class, 'index'])->name('search.index');
+// 検索関連
+Route::prefix('search')->name('search.')->group(function () {
+    Route::get('/{pet_type_id}', [SearchController::class, 'index'])->name('index');
+});
 
-Route::get('/pet/show/{rescue_pets_id}', [PetController::class, 'show'])->name('pet.show');
-Route::post('/pet/favorite', [PetController::class, 'favorite'])->name('pet.favorite');
+// ペット関連
+Route::prefix('pet')->name('pet.')->group(function () {
+    Route::get('/show/{rescue_pets_id}', [PetController::class, 'show'])->name('show');
+    Route::post('/favorite', [PetController::class, 'favorite'])->name('favorite');
+});
 
-Route::get('/member/index', [MemberController::class, 'index'])->name('member.index');
-Route::post('/member/create', [MemberController::class, 'create'])->name('member.create');
-Route::post('/member/login', [MemberController::class, 'login'])->name('member.login');
-Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.logout');
+// 会員関連
+Route::prefix('member')->name('member.')->group(function () {
+    Route::get('/index', [MemberController::class, 'index'])->name('index');
+    Route::post('/create', [MemberController::class, 'create'])->name('create');
+    Route::post('/login', [MemberController::class, 'login'])->name('login');
+    Route::get('/logout', [MemberController::class, 'logout'])->name('logout');
+});
 
-Route::get('/favorite/index', [FavoriteController::class, 'index'])->name('favorite.index');
+// お気に入り関連
+Route::prefix('favorite')->name('favorite.')->group(function () {
+    Route::get('/index', [FavoriteController::class, 'index'])->name('index');
+});
